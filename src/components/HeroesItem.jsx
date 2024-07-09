@@ -1,19 +1,29 @@
 import React from 'react'
 import Card from 'react-bootstrap/Card';
 import { startDeletingHeroes, startSaveActualizacion } from '../store/marvel/thunks';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { setActiveHeroe } from '../store/marvel/marvelSlice';
 
 export const HeroesItem = ({id, name,  thumbnail, description}) => {
 
     const dispatch = useDispatch();
+    const heroeActive = useSelector(state => state.marvel.active);
 
     const onDelete = () => {
         dispatch(startDeletingHeroes(id));
       }
     
       const onSave = () => {
-        dispatch(startSaveActualizacion(id));
-      }
+        if (heroeActive && heroeActive.id === id) {
+            dispatch(startSaveActualizacion());
+        } else {
+            console.error("No hay un héroe activo válido para guardar.");
+        }
+    }
+
+    const onSetActive = () => {
+      dispatch(setActiveHeroe({ id, name, thumbnail, description }));
+    };
 
   return (
   
@@ -29,6 +39,7 @@ export const HeroesItem = ({id, name,  thumbnail, description}) => {
       <Card.Text>{description}</Card.Text>
       <button onClick={onDelete}>Borrar</button>
       <button onClick={onSave}>Actualizar</button>
+      <button onClick={onSetActive}>Seleccionar</button>
     </Card.Body>
     </div>
   </Card>

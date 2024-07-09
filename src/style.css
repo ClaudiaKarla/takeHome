@@ -29,3 +29,15 @@ body{
   display: flex;
   justify-content:end;
 }
+
+.agregar{
+  color: beige;
+  font-family: 'Afacad', sans-serif;
+                                                                                               
+  font-size: 30px;    
+  margin: 5%;                       
+}
+
+.formularios{
+  margin-left: 3%;
+}

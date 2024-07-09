@@ -1,30 +1,43 @@
 import { useDispatch, useSelector } from "react-redux";
-import { getHeroes, startDeletingHeroes, startNewHeroe, startSaveActualizacion } from "../store/marvel/thunks";
+import { startNewHeroe } from "../store/marvel/thunks";
 import { useEffect } from "react";
 import { BuscarHeroes } from "./BuscarHeroes";
 import { HeroesCard } from "./HeroesCard";
-import { setActiveHeroe } from "../store/marvel/marvelSlice";
+import { setActiveHeroe, setHeroe } from "../store/marvel/marvelSlice";
 import { useForm } from "../hooks/useForm";
+import { getHeroData } from "../helpers/getHero";
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
 
 export const Marvel = () => {
 
   const dispatch =useDispatch();
-  const {heroes, active:noteActive} = useSelector(state => state.marvel);
-
-  const {formState} = useForm(noteActive);
+  const {heroes} = useSelector(state => state.marvel);
 
   useEffect(() => {
-    dispatch(getHeroes());
-  }, [dispatch])
+    const fetchData = async () => {
+        try {
+            const heroesData = await getHeroData();
+            // Aquí podrías procesar los datos si es necesario
+            return heroesData;
+        } catch (error) {
+            console.error('Error al obtener héroes:', error.message);
+            return [];
+        }
+    };
 
+    fetchData().then(heroesData => {
+        dispatch(setHeroe({ heroes: heroesData, name: 'Marvel Heroes' }));
+    });
+}, [dispatch]);
+
+if (heroes.length === 0) {
+  return <p>Cargando héroes...</p>; // Puedes mostrar un mensaje de carga mientras se obtienen los datos
+}
 
   const onClickNewHeroe = () => {
     dispatch(startNewHeroe());
   }
-
-  useEffect(() => {
-    dispatch(setActiveHeroe(formState));
-  }, [formState]);
 
   return (
   <>
@@ -34,7 +47,20 @@ export const Marvel = () => {
 <BuscarHeroes />
 </div>
 
-<button onClick={onClickNewHeroe}>Agregar</button>
+
+<Form className="agregar">
+      <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+        <Form.Label>Nombre del Heroe</Form.Label>
+        <Form.Control type="text" placeholder="nombre" className="formularios" />
+      </Form.Group>
+      <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+        <Form.Label>Descripción</Form.Label>
+        <Form.Control as="textarea" rows={3} className="formularios"/>
+      </Form.Group>
+      <Button style={{width:'150px', backgroundColor:'#606c38'}} variant="primary" type="submit" onClick={onClickNewHeroe}>
+        Agregar
+      </Button>
+    </Form>
 
   {
     heroes.map((heroe) => (

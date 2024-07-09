@@ -13,7 +13,8 @@ import { HeroesCard } from './HeroesCard';
 import { useForm } from '../hooks/useForm';
 import { getHeroesFromFirebase } from '../helpers/getHeroesFromFirebase';
 import { useDispatch } from 'react-redux';
-import { getHeroes } from '../store/marvel/thunks';
+import { getHeroes } from '../helpers/getHero';
+
 
 export const BuscarHeroes = () => {
 
