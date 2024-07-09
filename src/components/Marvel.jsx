@@ -18,7 +18,6 @@ export const Marvel = () => {
     const fetchData = async () => {
         try {
             const heroesData = await getHeroData();
-            // Aquí podrías procesar los datos si es necesario
             return heroesData;
         } catch (error) {
             console.error('Error al obtener héroes:', error.message);
@@ -32,7 +31,7 @@ export const Marvel = () => {
 }, [dispatch]);
 
 if (heroes.length === 0) {
-  return <p>Cargando héroes...</p>; // Puedes mostrar un mensaje de carga mientras se obtienen los datos
+  return <p>Cargando héroes...</p>; 
 }
 
   const onClickNewHeroe = () => {
